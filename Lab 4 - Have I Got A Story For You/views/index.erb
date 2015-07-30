@@ -4,7 +4,32 @@
     <div class="no-display pure-u-md-1-3 l-box"></div>
     <div class="pure-u-md-1-3 l-box">
       <h1 class="login-h1">Log In</h1>
-      
+      <form class="pure-form pure-form-aligned" method="post" action="/login">
+        <fieldset>
+          <div class="pure-control-group">
+            <label for="name">Username</label>
+            <input id="name" type="text" placeholder="Username">
+          </div>
+
+          <div class="pure-control-group">
+            <label for="password">Password</label>
+            <input id="password" type="password" placeholder="Password">
+          </div>
+
+          <div class="pure-controls">
+            <label for="cb" class="pure-checkbox">
+              <input id="cb" type="checkbox"> Remember Me?
+            </label>
+          </div>
+
+          <div class="pure-controls">
+            <label for="login-Button">
+              <a class="pure-button" href="/Register">Register</a>
+            </label>
+            <button type="submit" class="pure-button pure-button-primary" name="login-button">Login</button>
+          </div>
+        </fieldset>
+      </form>
     </div>
     <div class="no-display pure-u-md-1-3 l-box"></div>
   </section>
