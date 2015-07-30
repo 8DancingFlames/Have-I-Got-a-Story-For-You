@@ -45,6 +45,22 @@ post '/register' do
   redirect '/users'
 end
 
+get '/edit/:id' do
+  @title = "Register Test"
+  @user = db.units.first("_id" => params[:id])
+  @id = params[:id]
+  @username = @user["username"]
+  @password = @user["password"]
+  erb :edit
+end
+
+post '/edit/:id' do
+  @username = "#{params[:post][:username]}"
+  @password = "#{params[:post][:password]}"
+  db.units.save _id: params[:id], username: @username, password: @password
+  redirect '/users'
+end
+
 get '/delete/:id' do
   db.units.remove("_id" => params[:id])
   redirect '/users'
