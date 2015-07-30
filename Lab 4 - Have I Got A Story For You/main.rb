@@ -8,6 +8,7 @@ db = connection.default_test
 
 db.some_collection
 
+enable :sessions
 get '/' do
   @title = "Home is at Walden Books!"
   erb :index
@@ -18,6 +19,18 @@ get '/users' do
   @collection = db.units.all()
 
   erb :users
+end
+
+post '/login' do
+  @username = params[:name]
+  @password = params[:password]
+  @rememberme = params[:cb]
+
+  @possibleusers = db.units.find("username" => @username)
+  @possibleusers.each do |user|
+    if user[]
+  end
+
 end
 
 get '/register' do
