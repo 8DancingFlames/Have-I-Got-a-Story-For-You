@@ -1,0 +1,20 @@
+<h3>List of People</h3>
+
+<table class="gridtable">
+  <tr>
+    <th>Id</th>
+    <th>Username</th>
+    <th>Password</th>
+    <th></th>
+    <th></th>
+  </tr>
+  <% @collection.each do |i| %>
+      <%= '<tr>' %>
+      <%= '<td>' + i["_id"].to_s + '</td>' %>
+      <%= '<td>' + i["username"].to_s + '</td>' %>
+      <%= '<td>' + i["password"].to_s + '</td>' %>
+      <%= '<td><a href="/edit/' + i["_id"].to_s + '">Edit</a></td>' %>
+      <%= '<td><a href="/delete/' + i["_id"].to_s + '">Delete</a></td>' %>
+      <%= '</tr>' %>
+  <% end %>
+</table>
