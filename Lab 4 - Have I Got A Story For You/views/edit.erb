@@ -1,0 +1,10 @@
+<h3>Edit Account</h3>
+<form id="form" action="/edit/<%= @id %>" method="post">
+  <label for="username">Username: </label>
+  <input type="text" name="post[username]" value="<%= @username %>"/>
+  <br>
+  <label for="password">Password: </label>
+  <input type="password" name="post[password]" value="<%= @password %>"/>
+  <br>
+  <input type="submit" value="Submit">
+</form>
