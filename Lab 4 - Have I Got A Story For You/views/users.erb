@@ -13,8 +13,10 @@
       <%= '<td>' + i["_id"].to_s + '</td>' %>
       <%= '<td>' + i["username"].to_s + '</td>' %>
       <%= '<td>' + i["password"].to_s + '</td>' %>
-      <%= '<td><a href="/edit/' + i["_id"].to_s + '">Edit</a></td>' %>
-      <%= '<td><a href="/delete/' + i["_id"].to_s + '">Delete</a></td>' %>
+      <% if i["username"].to_s == $username %>
+          <%= '<td><a href="/edit/' + i["_id"].to_s + '">Edit</a></td>' %>
+          <%= '<td><a href="/delete/' + i["_id"].to_s + '">Delete</a></td>' %>
+      <% end %>
       <%= '</tr>' %>
   <% end %>
 </table>

@@ -14,8 +14,14 @@
     <body>
         <header>
           <a href="/">Home</a>
-          <a href="/register">Register</a>
-          <a href="/login">Login</a>
+          <% if $username == nil %>
+              <a href="/login">Login</a>
+              <a href="/create">Create an Account</a>
+              <a href="/users">List of People</a>
+          <% else %>
+              <a href="/users">List of People</a>
+              <a href="/logout">Logout</a>
+          <% end %>
         </header>
 
         <%= yield %>

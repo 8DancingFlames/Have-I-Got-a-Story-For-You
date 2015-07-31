@@ -3,6 +3,10 @@ require 'mongo/object'
 
 Mongo.defaults.merge! mutlti: true, safe: true
 
+$username
+$password
+$id
+$rememberme
 connection = Mongo:: Connection.new
 db = connection.default_test
 
@@ -15,26 +19,54 @@ get '/' do
 end
 
 get '/users' do
-  @title = "DB Test"
+  @title = "Users"
   @collection = db.units.all()
 
   erb :users
 end
 
-post '/login' do
-  @username = params[:name]
-  @password = params[:password]
-  @rememberme = params[:cb]
-
-  @possibleusers = db.units.find("username" => @username)
-  @possibleusers.each do |user|
-    if user[]
+get '/login' do
+  @title = "Login"
+  @username
+  @password
+  if $rememberme == "checked"
+    @username = session[:username]
+    @password = session[:password]
+    @checked = $rememberme
   end
 
+  erb :login
+end
+
+post '/login' do
+  @user = db.units.first("username" => "#{params[:post][:username]}", "password" => "#{params[:post][:password]}")
+  if @user != nil
+    if params[:post][:cb] == "on"
+      session[:username] = @user["username"]
+      session[:password] = params[:post][:password]
+      $rememberme = "checked"
+    else
+      $rememberme = ""
+    end
+    $username = @user["username"]
+    $id = @user["_id"]
+    redirect "/"
+  else
+    redirect '/login'
+  end
+end
+
+get '/logout' do
+  if $rememberme != "checked"
+    session.clear
+  end
+  $username = nil
+  $id = nil
+  redirect '/'
 end
 
 get '/register' do
-  @title = "Register Test"
+  @title = "Register"
   erb :register
 end
 

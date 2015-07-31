@@ -1,0 +1,18 @@
+<form class="pure-form pure-form-aligned" method="post" action="/login">
+    <div class="pure-control-group">
+      <label for="username">Username</label>
+      <input name="post[username]" type="text" placeholder="Username" value="<%= @username %>">
+    </div>
+
+    <div class="pure-control-group">
+      <label for="password">Password</label>
+      <input name="post[password]" type="password" placeholder="Password" value="<%= @password %>">
+    </div>
+
+    <div class="pure-controls">
+      <label for="cb" class="pure-checkbox">
+        <input name="post[cb]" type="checkbox" <%= @checked %>> Remember Me?
+      </label>
+    </div>
+    <button type="submit" class="pure-button pure-button-primary">Login</button>
+</form>
