@@ -48,6 +48,8 @@ def validatePassword( password, correctHash )
   return pbkdf2 == testHash
 end
 
+enable :sessions
+
 get '/' do
   @title = "Home is at Walden Books!"
   erb :index
@@ -58,6 +60,18 @@ get '/users' do
   @collection = db.units.all()
 
   erb :users
+end
+
+post '/login' do
+  @username = params[:name]
+  @password = params[:password]
+  @rememberme = params[:cb]
+
+  @possibleusers = db.units.find("username" => @username)
+  @possibleusers.each do |user|
+    if user[]
+  end
+
 end
 
 get '/register' do
@@ -71,6 +85,22 @@ post '/register' do
   @password = "#{params[:post][:password]}"
   @password = createHash(@password)
   db.units.save _id: Time.now.to_s + rand(1000000000).to_s, username: @username, password: @password
+  redirect '/users'
+end
+
+get '/edit/:id' do
+  @title = "Register Test"
+  @user = db.units.first("_id" => params[:id])
+  @id = params[:id]
+  @username = @user["username"]
+  @password = @user["password"]
+  erb :edit
+end
+
+post '/edit/:id' do
+  @username = "#{params[:post][:username]}"
+  @password = "#{params[:post][:password]}"
+  db.units.save _id: params[:id], username: @username, password: @password
   redirect '/users'
 end
 
