@@ -69,7 +69,7 @@ post '/login' do
 
   @possibleusers = db.units.find("username" => @username)
   @possibleusers.each do |user|
-    if user[]
+    
   end
 
 end
@@ -108,3 +108,4 @@ get '/delete/:id' do
   db.units.remove("_id" => params[:id])
   redirect '/users'
 end
+
