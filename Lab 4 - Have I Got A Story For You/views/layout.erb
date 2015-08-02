@@ -18,10 +18,10 @@
         <header>
           <a href="/">Home</a>
           <a href="/stories">Stories</a>
-          <% if $username == nil %>
+          <% if session[:username] == nil %>
               <a href="/register">Register</a>
           <% else %>
-              <a href="/myStories"><%= $username %></a>
+              <a href="/myStories"><%= session[:username] %></a>
               <a href="/logout">Logout</a>
           <% end %>
         </header>

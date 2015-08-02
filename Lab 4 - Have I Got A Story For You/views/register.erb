@@ -3,7 +3,7 @@
       <div class="no-display pure-u-md-1-3 l-box"></div>
       <div class="pure-u-md-1-3 l-box">
         <h1 class="welcome">Walden Books</h1>
-        <% if $username == nil %>
+        <% if session[:username] == nil %>
             <h1 class="login-h1">Register</h1>
             <form class="pure-form pure-form-aligned" method="post" action="/register">
               <div class="pure-control-group">

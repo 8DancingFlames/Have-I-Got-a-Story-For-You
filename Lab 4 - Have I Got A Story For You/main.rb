@@ -6,10 +6,7 @@ require 'base64'
 
 Mongo.defaults.merge! mutlti: true, safe: true
 
-$username
-$password
-$id
-$rememberme
+
 connection = Mongo:: Connection.new
 db = connection.default_test
 stories = connection.other_test
@@ -60,146 +57,12 @@ get '/' do
   @title = "Home is at Walden Books!"
   @username
   @password
-  if $rememberme == "checked"
+  if session[:rememberme] == "checked"
     @username = session[:username]
     @password = session[:password]
-    @checked = $rememberme
+    @checked = session[:rememberme]
   end
   erb :index
-end
-
-get '/users' do
-  @title = "Users"
-  @collection = db.units.all()
-
-  erb :users
-end
-
-get '/login' do
-  @title = "Login"
-  @username
-  @password
-  if $rememberme == "checked"
-    @username = session[:username]
-    @password = session[:password]
-    @checked = $rememberme
-  end
-  erb :login
-end
-
-post '/login' do
-  @user = db.units.first("username" => "#{params[:post][:username]}")
-  if @user != nil
-    if validatePassword("#{params[:post][:password]}", @user["password"])
-      if params[:post][:cb] == "on"
-        session[:username] = @user["username"]
-        session[:password] = params[:post][:password]
-        $rememberme = "checked"
-      else
-        $rememberme = ""
-      end
-      $username = @user["username"]
-      $password = "#{params[:post][:password]}"
-      $id = @user["_id"]
-      redirect "/"
-    else
-      redirect "/login"
-    end
-  else
-    redirect '/login'
-  end
-end
-
-get '/logout' do
-  if $rememberme != "checked"
-    session.clear
-  end
-  $username = nil
-  $id = nil
-  redirect '/'
-end
-
-get '/register' do
-  @title = "Register"
-  erb :register
-end
-
-post '/register' do
-  @username = "#{params[:post][:username]}"
-  @password = "#{params[:post][:password]}"
-  @password = createHash(@password)
-  @id = Time.now.to_s + rand(1000000000).to_s
-  db.units.save _id: @id, username: @username, password: @password
-  $username = @username
-  $password = "#{params[:post][:password]}"
-  $id = @id
-  redirect '/stories'
-end
-
-get '/edit/:id' do
-  @title = "Edit Account"
-  @user = db.units.first("_id" => params[:id])
-  @id = params[:id]
-  @username = @user["username"]
-  @password = $password
-  erb :edit
-end
-
-post '/edit/:id' do
-  @username = "#{params[:post][:username]}"
-  @password = "#{params[:post][:password]}"
-  @hashword = createHash(@password)
-  db.units.save _id: params[:id], username: @username, password: @hashword
-  redirect '/users'
-end
-
-get '/delete/:id' do
-  db.units.remove("_id" => params[:id])
-  $rememberme = ""
-  redirect '/logout'
-end
-
-get '/stories' do
-  @stories = stories.units.find("chapterId" => 1)
-  erb :stories
-end
-
-get '/myStories' do
-  @stories = stories.units.find("chapterId" => 1, "username" => $username)
-  erb :myStories
-end
-
-get '/create_story' do
-  erb :create_story
-end
-
-post '/create_story' do
-  @storyId = Time.now.to_s + rand(1000000000).to_s
-  @storyName = "#{params[:post][:storyName]}"
-  @chapterId = 1
-  @chapterName = "#{params[:post][:chapterName]}"
-  @content = "#{params[:post][:content]}"
-  @username = $username
-  @dateCreated = Time.now.to_s
-  @dateModified = Time.now.to_s
-  if params[:post][:finished] == "on"
-    @isFinished = true
-  else
-    @isFinished = false
-  end
-  stories.units.save storyId: @storyId, storyName: @storyName, chapterId: @chapterId, chapterName: @chapterName, content: @content, username: @username, dateCreated: @dateCreated, dateModified: @dateModified, isFinished: @isFinished
-  redirect '/stories'
-end
-
-get '/view_story/:id' do
-  @story = stories.units.first("storyId" => params[:id], "chapterId" => 1)
-  @storyName = @story["storyName"]
-  @username = @story["username"]
-  @id = params[:id]
-  @stories = stories.units.find("storyId" => params[:id])
-  @lastChapter = stories.units.first("storyId" => params[:id], "chapterId" => @stories.count())
-  @finished = @lastChapter["isFinished"]
-  erb :view_story
 end
 
 get '/add_chapter/:id' do
@@ -217,7 +80,7 @@ post '/add_chapter/:id' do
   @chapterId = @stories.count() + 1
   @chapterName = "#{params[:post][:chapterName]}"
   @content = "#{params[:post][:content]}"
-  @username = $username
+  @username = session[:username]
   @dateCreated = @story["dateCreated"]
   @dateModified = Time.now.to_s
   if params[:post][:finished] == "on"
@@ -228,4 +91,138 @@ post '/add_chapter/:id' do
   stories.units.save storyId: @storyId, storyName: @storyName, chapterId: @chapterId, chapterName: @chapterName, content: @content, username: @username, dateCreated: @dateCreated, dateModified: @dateModified, isFinished: @isFinished
   redirect '/stories'
 end
+
+get '/create_story' do
+  erb :create_story
+end
+
+post '/create_story' do
+  @storyId = Time.now.to_s + rand(1000000000).to_s
+  @storyName = "#{params[:post][:storyName]}"
+  @chapterId = 1
+  @chapterName = "#{params[:post][:chapterName]}"
+  @content = "#{params[:post][:content]}"
+  @username = session[:username]
+  @dateCreated = Time.now.to_s
+  @dateModified = Time.now.to_s
+  if params[:post][:finished] == "on"
+    @isFinished = true
+  else
+    @isFinished = false
+  end
+  stories.units.save storyId: @storyId, storyName: @storyName, chapterId: @chapterId, chapterName: @chapterName, content: @content, username: @username, dateCreated: @dateCreated, dateModified: @dateModified, isFinished: @isFinished
+  redirect '/stories'
+end
+
+get '/delete/:id' do
+  db.units.remove("_id" => params[:id])
+  session[:rememberme] = ""
+  redirect '/logout'
+end
+
+get '/edit/:id' do
+  @title = "Edit Account"
+  @user = db.units.first("_id" => params[:id])
+  @id = params[:id]
+  @username = @user["username"]
+  @password = session[:password]
+  erb :edit
+end
+
+post '/edit/:id' do
+  @username = "#{params[:post][:username]}"
+  @password = "#{params[:post][:password]}"
+  @hashword = createHash(@password)
+  db.units.save _id: params[:id], username: @username, password: @hashword
+  redirect '/users'
+end
+
+get '/login' do
+  @title = "Login"
+  @username
+  @password
+  if session[:rememberme] == "checked"
+    @username = session[:username]
+    @password = session[:password]
+    @checked = session[:rememberme]
+  end
+  erb :login
+end
+
+post '/login' do
+  @user = db.units.first("username" => "#{params[:post][:username]}")
+  if @user != nil
+    if validatePassword("#{params[:post][:password]}", @user["password"])
+      if params[:post][:cb] == "on"
+        session[:rememberme] = "checked"
+      else
+        session[:rememberme] = ""
+      end
+      session[:username] = @user["username"]
+      session[:password] = params[:post][:password]
+      session[:userid] = @user["_id"]
+      redirect "/"
+    else
+      redirect "/login"
+    end
+  else
+    redirect '/login'
+  end
+end
+
+get '/logout' do
+  if session[:rememberme] != "checked"
+    session.clear
+  end
+  session[:username] = nil
+  session[:userid] = nil
+  redirect '/'
+end
+
+get '/myStories' do
+  @stories = stories.units.find("chapterId" => 1, "username" => session[:username])
+  erb :myStories
+end
+
+get '/register' do
+  @title = "Register"
+  erb :register
+end
+
+post '/register' do
+  @username = "#{params[:post][:username]}"
+  @password = "#{params[:post][:password]}"
+  @password = createHash(@password)
+  @id = Time.now.to_s + rand(1000000000).to_s
+  db.units.save _id: @id, username: @username, password: @password
+  session[:username] = @username
+  session[:password] = "#{params[:post][:password]}"
+  session[:userid] = @id
+  redirect '/stories'
+end
+
+get '/stories' do
+  @stories = stories.units.find("chapterId" => 1)
+  erb :stories
+end
+
+get '/users' do
+  @title = "Users"
+  @collection = db.units.all()
+
+  erb :users
+end
+
+get '/view_story/:id' do
+  @story = stories.units.first("storyId" => params[:id], "chapterId" => 1)
+  @storyName = @story["storyName"]
+  @username = @story["username"]
+  @id = params[:id]
+  @stories = stories.units.find("storyId" => params[:id])
+  @lastChapter = stories.units.first("storyId" => params[:id], "chapterId" => @stories.count())
+  @finished = @lastChapter["isFinished"]
+  erb :view_story
+end
+
+
 

@@ -15,6 +15,6 @@
       <%= '<td>' + i["dateModified"].to_s + '</td>' %>
   <% end %>
 </table>
-<% if $username != nil %>
+<% if session[:username] != nil %>
     <a href="/create_story">Create Story</a>
 <% end %>
