@@ -1,0 +1,16 @@
+<h3>Stories</h3>
+
+<table class="gridtable">
+  <tr>
+    <th>Story Name</th>
+    <th>Created By</th>
+  </tr>
+  <% @stories.each do |i| %>
+      <%= '<tr>' %>
+      <%= '<td><a href="/view_story/' + i["storyId"].to_s + '">' + i["storyName"].to_s + '</a></td>' %>
+      <%= '<td>' + i["username"].to_s + '</td>' %>
+  <% end %>
+</table>
+<% if $username != nil %>
+    <a href="/create_story">Create Story</a>
+<% end %>
