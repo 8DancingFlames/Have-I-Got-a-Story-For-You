@@ -1,16 +1,29 @@
 *{
     box-sizing: border-box;
 }
-body {
-    background-color: bisque;
 
+body {
+    background-color: #efefef;
 }
+
+.welcome
+{
+    text-align: center;
+    font-family: 'Dancing Script', cursive;
+    font-size: 5em;
+}
+header
+{
+    margin-top: .5%;
+    margin-bottom: 1%;
+}
+
 .login-h1 {
-    background-color: coral;
+    font-family: 'Yanone Kaffeesatz', sans-serif;
+    text-align: center;
     height: 50px;
 }
 .main {
-    background-color: #FF7166;
     margin: 0 auto;
     width: 80%;
 }
@@ -26,4 +39,22 @@ body {
     padding: 1em;
 }
 .test-div {
+}
+
+a
+{
+    font-family: 'Yanone Kaffeesatz', sans-serif;
+    font-size: 1.8em;
+    text-decoration: none;
+    padding: .4em;
+    margin: .4em;
+}
+a:visited
+{
+    color:#000;
+    text-decoration: none;
+}
+a:hover
+{
+    color:#1483DD;
 }
