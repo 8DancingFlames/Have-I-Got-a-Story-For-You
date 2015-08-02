@@ -164,12 +164,17 @@ get '/stories' do
   erb :stories
 end
 
+get '/myStories' do
+  @stories = stories.units.find("chapterId" => 1, "username" => $username)
+  erb :myStories
+end
+
 get '/create_story' do
   erb :create_story
 end
 
 post '/create_story' do
-  @stroryId = Time.now.to_s + rand(1000000000).to_s
+  @storyId = Time.now.to_s + rand(1000000000).to_s
   @storyName = "#{params[:post][:storyName]}"
   @chapterId = 1
   @chapterName = "#{params[:post][:chapterName]}"
@@ -180,5 +185,17 @@ post '/create_story' do
   @isFinished = "#{params[:post][:isFinished]}"
   stories.units.save storyId: @storyId, storyName: @storyName, chapterId: @chapterId, chapterName: @chapterName, content: @content, username: @username, dateCreated: @dateCreated, dateModified: @dateModified, isFinished: @isFinished
   redirect '/stories'
+end
+
+get '/view_story/:id' do
+  @storys = stories.units.all()
+  @storys.each do |story|
+    if story["storyId"] == params[:id]
+      puts "match found"
+      @story_to_view = story
+    end
+  end
+
+  erb :view_story
 end
 
