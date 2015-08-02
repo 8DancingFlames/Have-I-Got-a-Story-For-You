@@ -182,20 +182,50 @@ post '/create_story' do
   @username = $username
   @dateCreated = Time.now.to_s
   @dateModified = Time.now.to_s
-  @isFinished = "#{params[:post][:isFinished]}"
+  if params[:post][:finished] == "on"
+    @isFinished = true
+  else
+    @isFinished = false
+  end
   stories.units.save storyId: @storyId, storyName: @storyName, chapterId: @chapterId, chapterName: @chapterName, content: @content, username: @username, dateCreated: @dateCreated, dateModified: @dateModified, isFinished: @isFinished
   redirect '/stories'
 end
 
 get '/view_story/:id' do
-  @storys = stories.units.all()
-  @storys.each do |story|
-    if story["storyId"] == params[:id]
-      puts "match found"
-      @story_to_view = story
-    end
-  end
-
+  @story = stories.units.first("storyId" => params[:id], "chapterId" => 1)
+  @storyName = @story["storyName"]
+  @username = @story["username"]
+  @id = params[:id]
+  @stories = stories.units.find("storyId" => params[:id])
+  @lastChapter = stories.units.first("storyId" => params[:id], "chapterId" => @stories.count())
+  @finished = @lastChapter["isFinished"]
   erb :view_story
+end
+
+get '/add_chapter/:id' do
+  @story = stories.units.first("storyId" => params[:id], "chapterId" => 1)
+  @id = params[:id]
+  @storyName = @story["storyName"]
+  erb :add_chapter
+end
+
+post '/add_chapter/:id' do
+  @story = stories.units.first("storyId" => params[:id])
+  @stories = stories.units.find("storyId" => params[:id])
+  @storyId = params[:id]
+  @storyName = @story["storyName"]
+  @chapterId = @stories.count() + 1
+  @chapterName = "#{params[:post][:chapterName]}"
+  @content = "#{params[:post][:content]}"
+  @username = $username
+  @dateCreated = @story["dateCreated"]
+  @dateModified = Time.now.to_s
+  if params[:post][:finished] == "on"
+    @isFinished = true
+  else
+    @isFinished = false
+  end
+  stories.units.save storyId: @storyId, storyName: @storyName, chapterId: @chapterId, chapterName: @chapterName, content: @content, username: @username, dateCreated: @dateCreated, dateModified: @dateModified, isFinished: @isFinished
+  redirect '/stories'
 end
 

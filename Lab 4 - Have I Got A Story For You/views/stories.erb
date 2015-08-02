@@ -4,11 +4,15 @@
   <tr>
     <th>Story Name</th>
     <th>Created By</th>
+    <th>Date Created</th>
+    <th>Date Modified</th>
   </tr>
   <% @stories.each do |i| %>
       <%= '<tr>' %>
       <%= '<td><a href="/view_story/' + i["storyId"].to_s + '">' + i["storyName"].to_s + '</a></td>' %>
       <%= '<td>' + i["username"].to_s + '</td>' %>
+      <%= '<td>' + i["dateCreated"].to_s + '</td>' %>
+      <%= '<td>' + i["dateModified"].to_s + '</td>' %>
   <% end %>
 </table>
 <% if $username != nil %>

@@ -1,0 +1,23 @@
+<section class="main">
+  <form class="pure-form pure-form-aligned" method="post" action="/add_chapter/<%= @id %>">
+    <div class="pure-control-group">
+      <h2><%= @storyName %></h2>
+    </div>
+
+    <div class="pure-control-group">
+      <label for="chapterName">Chapter Name</label>
+      <input name="post[chapterName]" type="text" placeholder="Chapter Name">
+    </div>
+
+    <div class="pure-control-group">
+      <textarea name="post[content]"></textarea>
+    </div>
+
+    <div class="pure-controls">
+      <label for="finished" class="pure-checkbox">
+        <input name="post[finished]" type="checkbox"> Last Chapter
+      </label>
+    </div>
+    <button type="submit" class="pure-button pure-button-primary">Add Chapter</button>
+  </form>
+</section>
