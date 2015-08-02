@@ -164,6 +164,11 @@ get '/stories' do
   erb :stories
 end
 
+get '/myStories' do
+  @stories = stories.units.find("chapterId" => 1, "username" => $username)
+  erb :myStories
+end
+
 get '/create_story' do
   erb :create_story
 end
