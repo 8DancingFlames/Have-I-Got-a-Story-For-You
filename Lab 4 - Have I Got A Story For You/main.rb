@@ -16,6 +16,24 @@ stories = connection.other_test
 
 db.some_collection
 stories.some_collection
+class Chapter
+  def initialize chapter_id, chapter_name, chapter_content, chapter_author
+    @chapter_id, @chapter_name, @chapter_content, @chapter_author = chapter_id, chapter_name, chapter_content, chapter_author
+  end
+  def get_chapter_author
+    return @chapter_author
+  end
+  def get_chapter_content
+    return @chapter_content
+  end
+  def get_chapter_id
+    return @chapter_id
+  end
+  def get_chapter_name
+    return @chapterName
+  end
+
+end
 
 PBKDF2_ITERATIONS = 1000
 SALT_BYTE_SIZE = 24
@@ -162,16 +180,25 @@ get '/create_story' do
 end
 
 post '/create_story' do
-  @stroryId = Time.now.to_s + rand(1000000000).to_s
+  @storyId = Time.now.to_s + rand(1000000000).to_s
   @storyName = "#{params[:post][:storyName]}"
+  @username = $username
   @chapterId = 1
   @chapterName = "#{params[:post][:chapterName]}"
   @content = "#{params[:post][:content]}"
-  @username = $username
+  @Table_of_contents = Array.new()
+  @Table_of_contents.push(Chapter.new(@chapterId, @chapterName, @content, @username))
   @dateCreated = Time.now.to_s
   @dateModified = Time.now.to_s
   @isFinished = "#{params[:post][:isFinished]}"
-  stories.units.save storyId: @storyId, storyName: @storyName, chapterId: @chapterId, chapterName: @chapterName, content: @content, username: @username, dateCreated: @dateCreated, dateModified: @dateModified, isFinished: @isFinished
+  stories.units.save storyId: @storyId, storyName: @storyName, chapterId: @chapterId, chapterName: @chapterName, content: @content, username: @username, dateCreated: @dateCreated, dateModified: @dateModified, isFinished: @isFinished, tableOfContents: @Table_of_contents
   redirect '/stories'
+end
+
+get '/view_story/:id' do
+  @story_to_view = stories.units.first("_id" => params[:id])
+
+
+  erb :view_story
 end
 
