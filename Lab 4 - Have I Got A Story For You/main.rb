@@ -164,12 +164,17 @@ get '/stories' do
   erb :stories
 end
 
+get '/myStories' do
+  @stories = stories.units.find("chapterId" => 1, "username" => $username)
+  erb :myStories
+end
+
 get '/create_story' do
   erb :create_story
 end
 
 post '/create_story' do
-  @stroryId = Time.now.to_s + rand(1000000000).to_s
+  @storyId = Time.now.to_s + rand(1000000000).to_s
   @storyName = "#{params[:post][:storyName]}"
   @chapterId = 1
   @chapterName = "#{params[:post][:chapterName]}"

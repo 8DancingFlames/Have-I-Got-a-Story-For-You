@@ -19,9 +19,8 @@
           <a href="/stories">Stories</a>
           <% if $username == nil %>
               <a href="/register">Register</a>
-              <a href="/users">List of People</a>
           <% else %>
-              <a href="/users">List of People</a>
+              <a href="/myStories"><%= $username %></a>
               <a href="/logout">Logout</a>
           <% end %>
         </header>
