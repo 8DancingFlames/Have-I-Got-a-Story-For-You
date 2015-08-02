@@ -188,8 +188,13 @@ post '/create_story' do
 end
 
 get '/view_story/:id' do
-  @story_to_view = stories.units.first("_id" => params[:id])
-
+  @storys = stories.units.all()
+  @storys.each do |story|
+    if story["storyId"] == params[:id]
+      puts "match found"
+      @story_to_view = story
+    end
+  end
 
   erb :view_story
 end
