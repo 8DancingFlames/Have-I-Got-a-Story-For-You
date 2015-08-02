@@ -1,0 +1,24 @@
+<section class="main">
+  <form class="pure-form pure-form-aligned" method="post" action="/create_story">
+    <div class="pure-control-group">
+      <label for="storyName">Story Name</label>
+      <input name="post[storyName]" type="text" placeholder="Story Name">
+    </div>
+
+    <div class="pure-control-group">
+      <label for="chapterName">Chapter Name</label>
+      <input name="post[chapterName]" type="text" placeholder="Chapter Name">
+    </div>
+
+    <div class="pure-control-group">
+      <textarea name="post[content]"></textarea>
+    </div>
+
+    <div class="pure-controls">
+      <label for="finished" class="pure-checkbox">
+        <input name="post[finished]" type="checkbox"> Last Chapter
+      </label>
+    </div>
+    <button type="submit" class="pure-button pure-button-primary">Create Story</button>
+  </form>
+</section>

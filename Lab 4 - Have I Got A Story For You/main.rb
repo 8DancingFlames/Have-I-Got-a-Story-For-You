@@ -12,8 +12,10 @@ $id
 $rememberme
 connection = Mongo:: Connection.new
 db = connection.default_test
+stories = connection.other_test
 
 db.some_collection
+stories.some_collection
 
 PBKDF2_ITERATIONS = 1000
 SALT_BYTE_SIZE = 24
@@ -148,5 +150,28 @@ get '/delete/:id' do
   db.units.remove("_id" => params[:id])
   $rememberme = ""
   redirect '/logout'
+end
+
+get '/stories' do
+  @stories = stories.units.find("chapterId" => 1)
+  erb :stories
+end
+
+get '/create_story' do
+  erb :create_story
+end
+
+post '/create_story' do
+  @stroryId = Time.now.to_s + rand(1000000000).to_s
+  @storyName = "#{params[:post][:storyName]}"
+  @chapterId = 1
+  @chapterName = "#{params[:post][:chapterName]}"
+  @content = "#{params[:post][:content]}"
+  @username = $username
+  @dateCreated = Time.now.to_s
+  @dateModified = Time.now.to_s
+  @isFinished = "#{params[:post][:isFinished]}"
+  stories.units.save storyId: @storyId, storyName: @storyName, chapterId: @chapterId, chapterName: @chapterName, content: @content, username: @username, dateCreated: @dateCreated, dateModified: @dateModified, isFinished: @isFinished
+  redirect '/stories'
 end
 
