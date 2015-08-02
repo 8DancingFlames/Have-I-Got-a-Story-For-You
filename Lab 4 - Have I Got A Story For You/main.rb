@@ -76,6 +76,13 @@ enable :sessions
 
 get '/' do
   @title = "Home is at Walden Books!"
+  @username
+  @password
+  if $rememberme == "checked"
+    @username = session[:username]
+    @password = session[:password]
+    @checked = $rememberme
+  end
   erb :index
 end
 
