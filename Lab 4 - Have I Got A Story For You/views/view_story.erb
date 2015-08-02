@@ -18,5 +18,9 @@
     <% if $username != nil && !@finished %>
         <a href="/add_chapter/<%= @id %>">Add a Chapter</a>
     <% end %>
+
+    <% if @finished %>
+        <p>This story has been finished.</p>
+    <% end %>
   </div>
 </section>
