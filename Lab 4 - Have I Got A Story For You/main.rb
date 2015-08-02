@@ -133,7 +133,7 @@ post '/register' do
   $username = @username
   $password = "#{params[:post][:password]}"
   $id = @id
-  redirect '/users'
+  redirect '/stories'
 end
 
 get '/edit/:id' do
